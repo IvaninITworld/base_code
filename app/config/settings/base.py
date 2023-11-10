@@ -1,14 +1,15 @@
-
 import os
-import boto3
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-_axc0c=j-775+4_7)u_fbxtb(#vsk1&f256+rveuc(sk4r!*b$"
+SECRET_KEY = "django-insecure-7%0kk0bn)n)ot$#u%_c2#8&2-*be^vrvp8n5o#p31((wub&_+l"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -29,8 +30,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-# Third part Apps
-INSTALLED_APPS += []
+# Third Party App
+INSTALLED_APPS += [
+    "rest_framework",
+    "drf_spectacular",
+]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -65,11 +69,6 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-# "ENGINE": "django.db.backends.postgresql",
-# "ENGINE": "django.db.backends.mysql",
-# "ENGINE": "django.db.backends.sqlite3",
-# "ENGINE": "django.db.backends.oracle",
-
 
 DATABASES = {
     "default": {
@@ -78,6 +77,7 @@ DATABASES = {
         "USER": os.getenv("POSTGRES_USER", "postgres"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
         "HOST": os.getenv("DB_HOST", "db"),
+        "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
@@ -113,7 +113,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# Satic files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
@@ -125,28 +125,17 @@ STATIC_ROOT = "/var/www/html/static"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    # Quick start for DRF
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10,
-    "DEFAULT_FILTER_BACKENDS": [
-        "rest_framework.filters.OrderingFilter",
-        "rest_framework.filters.SearchFilter",
-    ],
-    # or allow read-only access for unauthenticated users.
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
-## NCP
-NCP_ACCESS_KEY = os.getenv("NCP_ACCESS_KEY", "")
-NCP_SECRET_KEY = os.getenv("NCP_SECRET_KEY", "")
-
-## AWS
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "")
-AWS_DEFAULT_REGION = os.getenv("AWS_DEFAULT_REGION", "")
-
-aws_session = boto3.Session(
-    aws_access_key_id=AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-    region_name=AWS_DEFAULT_REGION
-)
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Your Project API",
+    "DESCRIPTION": "Your project description",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+    },
+}
