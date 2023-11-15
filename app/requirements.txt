@@ -3,7 +3,9 @@ gunicorn==21.2.0
 
 djangorestframework==3.14.0
 drf-spectacular==0.26.5
+django-allauth==0.58.2
 
 psycopg2-binary==2.9.9
 
 Faker==19.12.0
+python-dotenv==1.0.0
